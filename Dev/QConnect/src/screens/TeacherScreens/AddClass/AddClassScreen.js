@@ -22,7 +22,12 @@ export class AddClassScreen extends Component {
     className: "",
     classImageId: Math.floor(Math.random() * 10),
     modalVisible: false,
+    classIcon: classImages.images[this.classImageId]
   };
+
+  changeClassicon() {
+    classIcon.setState = (classImages.images[this.state.classImageId]);
+  }
 
   /*This method will toggle the 
    *On the modal visablity.
@@ -70,19 +75,18 @@ export class AddClassScreen extends Component {
           visible={this.state.modalVisible}
           onRequestClose={() => {
             Alert.alert('Modal has been closed.');
-            style={
-              flex: 1
+            style = {
+              flex: 2,
             }
           }}>
 
           <IconSelectionGrid
             style={{
               flex: 1,
-              width: 100,
-              height: 100
             }}
             images={classImages.images}
-            onImageSelected={() => this.onImageSelected.bind(this)}
+            onImageSelected={() => this.onImageSelected.bind(this.state.classImageId)}
+          //  onImageSelected={()=> this.setModalVisible(!this.state.modalVisible)}
           >
 
           </IconSelectionGrid>
@@ -91,9 +95,9 @@ export class AddClassScreen extends Component {
           <View style={{ margin: 150 }}>
 
             <QcActionButton
-            style={{
-              flex: 1,
-            }}
+              style={{
+                flex: 1,
+              }}
               text="Close Image Menu"
               onPress={() => {
                 this.setModalVisible(!this.state.modalVisible);
@@ -109,7 +113,7 @@ export class AddClassScreen extends Component {
             this.setModalVisible(!this.state.modalVisible);
           }}>
           <Image
-            source={(classImages.images[this.state.classImageId])}
+            source={this.state.classIcon}
             style={{
               backgroundColor: colors.lightGrey,
               borderRadius: 50 / 2,
