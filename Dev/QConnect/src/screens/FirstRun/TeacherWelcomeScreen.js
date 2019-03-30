@@ -12,9 +12,6 @@ class TeacherWelcomeScreen extends Component {
         const { navigation } = this.props;
         return(
             <QcActionButton
-                        style={{
-                            verticalPadding: 20,
-                        }}
                         navigation={navigation}
                         text="Save"
                         onPress={this.onTeacherFlow} />
