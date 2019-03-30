@@ -12,7 +12,7 @@ class FirstRunScreen extends React.Component {
 
     onTeacherFlow = () => {
       //todo: get the first class to show from redux persist (current class)
-        this.props.navigation.push('TeacherWelcomeScreen', { classIndex: 0, classTitle: "Quran Clas"});
+        this.props.navigation.push('TeacherScreens', { classIndex: 0, classTitle: "Quran Clas" });
     }
 
     render() {
@@ -23,9 +23,11 @@ class FirstRunScreen extends React.Component {
                     <QcAppBanner />
                     <View style={styles.spacer}></View>
                     <QcActionButton
+                    
                         navigation={navigation}
                         text="I am a teacher"
-                        onPress={this.onTeacherFlow} />
+                        onPress={this.onTeacherFlow}
+                         />
                 </ImageBackground>
             </View>  
         );
@@ -34,7 +36,8 @@ class FirstRunScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1
+      flex: 1,
+    
     },
     spacer: {
       marginTop: 150 //hack, change this to be flex based.
