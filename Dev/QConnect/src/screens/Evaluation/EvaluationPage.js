@@ -2,14 +2,8 @@ import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import { Rating, AirbnbRating } from 'react-native-elements';
 import colors from 'config/colors';
-import QCActionButton from 'components/QcActionButton';
-
-
-
-
 
 class EvaluationPage extends Component {
-
 
   render() {
     return (
@@ -29,15 +23,6 @@ class EvaluationPage extends Component {
             
           }}
         />
-
-      <QCActionButton
-      text = "Confirm Rating"
-      onPress={()=>{
-          EvaluationInfo.push({
-          
-          })
-      }}
-      />
       </View>
 
     )
