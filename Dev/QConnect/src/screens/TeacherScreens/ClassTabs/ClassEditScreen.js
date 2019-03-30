@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput, FlatList } from "react-native";
+import { ScrollView, View, StyleSheet, TextInput, FlatList } from "react-native";
+import Toast, {DURATION} from 'react-native-easy-toast'
 import { connect } from "react-redux";
 import StudentCard from "components/StudentCard";
 import colors from "config/colors";
@@ -7,7 +8,7 @@ import { bindActionCreators } from "redux";
 import { deleteStudent } from "model/actions/deleteStudent";
 import { addStudent } from "model/actions/addStudent";
 import QcActionButton from "components/QcActionButton";
-import { ToastAndroid } from "react-native";
+import studentImages from "config/studentImages";
 
 export class ClassEditScreen extends Component {
   state = {
@@ -15,29 +16,43 @@ export class ClassEditScreen extends Component {
   };
 
   getAvatarUrl() {
-    let photoNum = Math.floor(Math.random() * Math.floor(90));
+    let photoNum = Math.floor(Math.random() * Math.floor(99));
     let url =
       "https://randomuser.me/api/portraits/thumb/men/" + photoNum + ".jpg";
     return url;
   }
 
+  getImageId() {
+    let photoNum = Math.floor(Math.random() * Math.floor(30));
+    return photoNum;
+  }
+
   addNewStudent(classIndex) {
-    if (this.state.newStudentName){
+    if (this.state.newStudentName) {
     this.props.addStudent({
       classIndex: classIndex,
       studentInfo: {
         name: this.state.newStudentName,
         avatar: this.getAvatarUrl(),
-        assignment: "No assignment yet",
+        imageId: this.getImageId(),
+        currentAssignment: {
+          name: "None",
+          startDate: ""
+        },
+        assignmentHistory:[],
         attendanceHistory: []
       }
     });
-    ToastAndroid.show(
-      this.state.newStudentName + " is now added to the class",
-      ToastAndroid.SHORT
-    );}else{
+    this.refs.toast.show(this.state.newStudentName + " is now added to the class", 
+    DURATION.LENGTH_SHORT);
+    ;} else {
       alert("Please input a Name!")
     }
+  }
+
+  getStudentImage(imageId, avatar) {
+    console.log(imageId, avatar)
+    return imageId? studentImages.images[imageId] : { uri: avatar };
   }
 
   render() {
@@ -66,7 +81,7 @@ export class ClassEditScreen extends Component {
             <StudentCard
               key={index}
               studentName={item.name}
-              profilePic={{ uri: item.avatar }}
+              profilePic={ this.getStudentImage(item.imageId, item.avatar)}
               background={colors.white}
               onPress={() =>
                 deleteStudent(
@@ -77,6 +92,7 @@ export class ClassEditScreen extends Component {
             />
           )}
         />
+        <Toast ref="toast"/>
       </ScrollView>
     );
   }

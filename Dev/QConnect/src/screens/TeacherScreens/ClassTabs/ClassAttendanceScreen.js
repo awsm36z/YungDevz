@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { ScrollView, StyleSheet, View, FlatList, ToastAndroid } from 'react-native';
+import { ScrollView, StyleSheet, View, ToastAndroid } from 'react-native';
+import Toast, {DURATION} from 'react-native-easy-toast'
 import DatePicker from 'react-native-datepicker';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -14,7 +15,7 @@ export class ClassAttendanceScreen extends Component {
 
     state = {
         selectedStudents: [],
-        selectedDate: new Date().toLocaleDateString("en-US")
+        selectedDate: this.props.defaultDate? this.props.defaultDate : new Date().toLocaleDateString("en-US")
     }
 
     //This method will set the student selected property to the opposite of whatever it was
@@ -63,13 +64,13 @@ export class ClassAttendanceScreen extends Component {
             classIndex,
             attendanceInfo
         );
-        ToastAndroid.show("Attendance for " + date + " has been saved", ToastAndroid.SHORT);
+        this.refs.toast.show("Attendance for " + date + " has been saved", DURATION.LENGTH_SHORT);
     }
 
     //This method will set the state of the attendance screen based on the isHere property
     //from each student's attendance history based on the corresponding date
     getAttendance = (classIndex, date) => {
-        let studentList = this.props.teacher.classes[classIndex].students;
+        let studentList = this.props.classes[classIndex].students;
         let selected = [];
         //Maps out the list of students
         studentList.map((student, i) => {
@@ -104,7 +105,7 @@ export class ClassAttendanceScreen extends Component {
 
         const { params } = this.props.navigation.state;
 
-        classIndex = params && params.classIndex? params.classIndex : 0;
+        classIndex = params && params.classIndex ? params.classIndex : 0;
     
         return (
         //The scroll view will have at the top a date picker which will be defaulted to the current
@@ -119,7 +120,7 @@ export class ClassAttendanceScreen extends Component {
                     format="MM-DD-YYYY"
                     duration={300}
                     style={{paddingLeft: 15}}
-                    maxDate={new Date().toLocaleDateString("en-US")}
+                    maxDate={this.state.selectedDate}
                     customStyles={{dateInput: {borderColor: colors.lightGrey}}}
                     onDateChange={(date) => this.getAttendance(classIndex, date)}
                     />
@@ -136,12 +137,13 @@ export class ClassAttendanceScreen extends Component {
                         key={i}
                         studentName={student.name}
                         profilePic={{uri: student.avatar}}
-                        currentAssignment={student.assignment}
+                        currentAssignment={student.currentAssignment.name}
                         background={color}
                         onPress={() => this.onStudentSelected(i) }
                     />
                 );
             })}
+            <Toast ref="toast"/>
         </ScrollView>);
     }
 }

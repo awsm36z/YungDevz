@@ -6,9 +6,11 @@ import {ClassEditScreen} from '../src/screens/TeacherScreens/ClassTabs/ClassEdit
 import {ClassAttendanceScreen} from '../src/screens/TeacherScreens/ClassTabs/ClassAttendanceScreen';
 import {AddClassScreen} from '../src/screens/TeacherScreens/AddClass/AddClassScreen';
 import {TeacherProfileScreen} from '../src/screens/TeacherScreens/TeacherProfile/TeacherProfileScreen.js'
+import { TeacherWelcomeScreen } from '../src/screens/FirstRun/TeacherWelcomeScreen';
+import { EvaluationPage } from '../src/screens/Evaluation/EvaluationPage';
 
 describe('Teacher screens snapshots', () => {
-  const testRenderTeacherScreen = (screenName, Component) => {
+  const testRenderTeacherScreen = (screenName, Component, props) => {
     test(`render ${screenName}`, () => {
         const navigation = {
           state: {
@@ -19,11 +21,12 @@ describe('Teacher screens snapshots', () => {
         }
 
         const {teachers} = INITIAL_STATE;
-        const { classes } = teachers[0];
+        const teacher = teachers[0];
         
         const tree = renderer.create(<Component 
-          classes = {classes}
+          classes = {teacher.classes}
           navigation = {navigation}
+          {...props} 
         />).toJSON();
 
         expect(tree).toMatchSnapshot();
@@ -32,7 +35,9 @@ describe('Teacher screens snapshots', () => {
 
   testRenderTeacherScreen("ClassMainScreen", ClassMainScreen)
   testRenderTeacherScreen("ClassEditScreen", ClassEditScreen)
-  testRenderTeacherScreen("ClassAttendanceScreen", ClassAttendanceScreen)
+  testRenderTeacherScreen("ClassAttendanceScreen", ClassAttendanceScreen, {defaultDate: new Date(1552719600000)})
   testRenderTeacherScreen("AddClassScreen", AddClassScreen)
-  testRenderTeacherScreen("TeacherProfileScreen", TeacherProfileScreen)
+  testRenderTeacherScreen("TeacherProfileScreen", TeacherProfileScreen, {name: "TestName", phoneNumber: "TestNumber", emailAddress: "TestEmail", profileImageId: 1})
+  testRenderTeacherScreen("TeacherWelcomeScreen", TeacherWelcomeScreen, {name: "TestName", phoneNumber: "TestNumber", emailAddress: "TestEmail", profileImageId: 1})
+  testRenderTeacherScreen("TeacherWelcomeScreen", EvaluationPage, {name: "TestName", avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg", currentAssignment: {name: "test assignment"}})
 })
